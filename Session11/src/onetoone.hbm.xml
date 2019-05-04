@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   
+   <class name="co.edureka.model.Manager" table="MANAGER">
+      
+      <id name="mid" column="MID">
+         <generator class="increment"/>
+      </id>
+      <property name="name" column="NAME" />
+      <property name="department" column="DEPARTMENT" />
+      <one-to-one name="project" class="co.edureka.model.Project" cascade="all"/>
+      
+   </class>
+   
+    <class name="co.edureka.model.Project" table="PROJECT">
+      
+      <id name="pid" column="PID">
+         <generator class="foreign">
+         	<param name="property">manager</param>
+         </generator>
+      </id>
+      
+      <property name="name" column="NAME" />
+      <property name="technology" column="TECHNOLOGY" />
+      <one-to-one name="manager" class="co.edureka.model.Manager" cascade="all" constrained="true"/>
+      
+   </class>
+   
+   
+   
+</hibernate-mapping>
