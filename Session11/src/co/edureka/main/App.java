@@ -16,8 +16,8 @@ public class App {
 
 	public static void main(String[] args) {
 		
-		Employee eRef1 = new Employee(null, "Daisy", "daisy@example.com", 32, 33000);
-		Employee eRef2 = new Employee(null, "Jack", "jack@example.com", 26, 27000);
+		//Employee eRef1 = new Employee(null, "Daisy", "daisy@example.com", 32, 33000);
+		//Employee eRef2 = new Employee(null, "Jack", "jack@example.com", 26, 27000);
 		
 		//System.out.println(">> eRef1 details: "+eRef1);
 		//System.out.println(">> eRef2 details: "+eRef2);
@@ -36,6 +36,7 @@ public class App {
 		AnnotationConfiguration config = null; // if we are using annotations instead of xml mapping
 		SessionFactory factory = null;
 		Session session = null;
+		Session session1 = null; // 2nd level of cache shall be maintained at SessionFactory Level
 		Transaction transaction = null;
 
 		try {
@@ -95,6 +96,22 @@ public class App {
 				session.save(e);
 			}*/
 			
+			// Ftech Records from DataBase
+			Employee e1 = (Employee)session.get(Employee.class, 3);
+			Employee e2 = (Employee)session.get(Employee.class, 4);
+			
+			System.out.println(">> "+e1);
+			System.out.println(">> "+e2);
+			
+			// Before session is closed, let us re-fetch the same records (3 and 4) again
+			System.out.println(">> Re-Fetching the Records");
+			
+			Employee e3 = (Employee)session.get(Employee.class, 3);
+			Employee e4 = (Employee)session.get(Employee.class, 4);
+			
+			System.out.println(">> "+e3);
+			System.out.println(">> "+e4);
+			
 			transaction.commit();
 			
 			System.out.println(">> Hibernate Transaction Done");
@@ -103,6 +120,7 @@ public class App {
 			System.out.println(">> Some Exception: "+e);
 		}finally{
 			session.close();
+			factory.close();
 		}
 		
 
